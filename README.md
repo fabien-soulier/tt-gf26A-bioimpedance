@@ -1,4 +1,4 @@
-# bioimpedance
+# Bioimpedance
 
 This project is a proof of concept of an impedance analysis system
 using very low digital resources making it suitable for embedded
