@@ -1,18 +1,15 @@
 MODULES = frequency_divider
 SRC = $(addprefix ../src/, $(addsuffix .v, $(MODULES)))
 
-default: $(addsuffix -tb.gtkw, $(MODULES))
+default: $(addsuffix -tb.vcd, $(MODULES))
 
-%-tb.out: $(SRC) %-tb.v
-	iverilog -I . $^ -o $@
+%.out: $(SRC) %.v
+	iverilog -I $(SRC) $^ -o $@
 
-%_tb.vcd: %_tb.out
+%.vcd: %.out
 	./$<
 
-%.gtkw: %.vcd
-	gtkwave $< -O $@
-
 clean:
-	rm -f *.out *.vcd *.gtkw 
+	rm -f *.out *.vcd
 
 .PHONY: all prog clean
