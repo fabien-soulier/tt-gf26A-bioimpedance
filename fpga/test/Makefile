@@ -3,13 +3,13 @@ SRC = $(addprefix ../src/, $(addsuffix .v, $(MODULES)))
 
 default: $(addsuffix -tb.vcd, $(MODULES))
 
-%.out: $(SRC) %.v
-	iverilog -I $(SRC) $^ -o $@
+%.vvp: $(SRC) %.v
+	iverilog -g2012 -I $(SRC) $^ -o $@
 
-%.vcd: %.out
-	./$<
+%.vcd: %.vvp
+	vvp $<
 
 clean:
-	rm -f *.out *.vcd
+	rm -f *.vvp *.vcd *.out
 
-.PHONY: all prog clean
+.PHONY: clean
