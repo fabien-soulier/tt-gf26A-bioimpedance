@@ -1,15 +1,24 @@
-MODULES = frequency_divider
-SRC = $(addprefix ../src/, $(addsuffix .v, $(MODULES)))
 
-default: $(addsuffix -tb.vcd, $(MODULES))
+# Defaults
+SIM ?= icarus
+FST ?= -fst # Use more efficient FST format
+TOPLEVEL_LANG ?= verilog
+SRC_DIR = $(PWD)/../src
+PROJECT_SOURCES = frequency_divider.v
 
-%.vvp: $(SRC) %.v
-	iverilog -g2012 -I $(SRC) $^ -o $@
+# RTL simulation:
+SIM_BUILD = sim_build/rtl
+VERILOG_SOURCES += $(addprefix $(SRC_DIR)/,$(PROJECT_SOURCES))
 
-%.vcd: %.vvp
-	vvp $<
+# Allow sharing configuration between design and testbench via `include`:
+COMPILE_ARGS += -I$(SRC_DIR)
 
-clean:
-	rm -f *.vvp *.vcd *.out
+# Include the testbench sources:
+VERILOG_SOURCES += $(PWD)/frequency_divider-tb.v
+TOPLEVEL = tb
 
-.PHONY: clean
+# List test modules to run, separated by commas and without the .py suffix:
+COCOTB_TEST_MODULES = frequency_divider
+
+# include cocotb's make rules to take care of the simulator setup
+include $(shell cocotb-config --makefiles)/Makefile.sim

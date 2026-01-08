@@ -1,33 +1,23 @@
-module tb;
-    reg clk = 0;
-    reg rst = 0;
-    wire clki;
-    wire clkq;
+module tb();
 
-    frequency_divider fd(
-        .clk(clk),
-        .rst(rst),
-        .clki(clki),
-        .clkq(clkq)
-    );
+  // Dump the signals to a FST file. You can view it with gtkwave or surfer.
+  initial begin
+    $dumpfile("frequency_divider-tb.fst");
+    $dumpvars(1, tb);
+    #1;
+  end
 
-    always #1 clk = ~clk;
+  // Wire up the inputs and outputs:
+  reg clk = 0;
+  reg rst = 0;
+  wire clki;
+  wire clkq;
 
-//    sequence freq;
-//       (clki == 0) ##2 (clki == 0);
-//    endsequence
-//   
-    initial begin
-        $dumpfile("frequency_divider-tb.vcd");
-        $dumpvars(1, tb);
-        #1 rst = 1;
-        #1 assert(clki == 0 && clkq == 0) 
-          else $error("Asynchronous reset failed.");
-        #2 rst = 0;       
-       // #1 (clki == 1 && clkq == 0)
-        #12 $finish;
-    end
+  frequency_divider fd(
+      .clk(clk),
+      .rst(rst),
+      .clki(clki),
+      .clkq(clkq)
+  );
 
 endmodule
-
-
