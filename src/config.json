@@ -29,10 +29,21 @@
 
   "//": "If you need a custom clock configuration, read the following documentation first:",
   "//": "https://tinytapeout.com/faq/#how-can-i-map-an-additional-external-clock-to-one-of-the-gpios",
-  "CLOCK_PORT": "clk",
+  "CLOCK_PORT": "ui_in[1]",
 
   "//": "Configuration docs: https://librelane.readthedocs.io/en/latest/reference/configuration.html",
 
+ "DESIGN_NAME": "tt_um_bioimpedance",
+  "VERILOG_FILES": [
+    "dir::Top_level.v",
+    "dir::Output_Register.v",
+    "dir::compt8.v",
+    "dir::diviseur2.v",
+    "dir::tt_um_bioimpedance.v",
+    "dir::top_demod.v",
+    "dir::uart_tx_8n1.v"
+  ],
+  
   "//": "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
   "//": "!!! DO NOT CHANGE ANYTHING BELOW THIS POINT !!!",
   "//": "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",

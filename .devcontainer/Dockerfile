@@ -5,8 +5,12 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV PDK_ROOT=/home/vscode/ttsetup/pdk
 ENV PDK=gf180mcuD
 
-RUN apt update
-RUN apt install -y iverilog gtkwave python3 python3-pip python3-venv python3-tk python-is-python3 libcairo2 verilator libpng-dev libqhull-dev
+RUN apt update && apt install -y software-properties-common && add-apt-repository -y ppa:deadsnakes/ppa
+RUN apt update && apt install -y iverilog gtkwave python3.11 python3-pip python3.11-venv python3.11-tk python-is-python3 libcairo2 verilator libpng-dev libqhull-dev
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 2 && \
+    update-alternatives --set python3 /usr/bin/python3.11 && \
+    update-alternatives --install /usr/bin/python python /usr/bin/python3.11 2 && \
+    update-alternatives --set python /usr/bin/python3.11
 
 # Clone tt-support-tools
 RUN mkdir -p /ttsetup
