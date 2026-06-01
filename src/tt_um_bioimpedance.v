@@ -24,19 +24,20 @@ Top_level #(
         .NB (8),
         .TOTAL_BITS (128)
     ) u_top(
-        .CLK (ui_in[1]),
+        .CLK (clk),
         .RST (RST),
         .ADC_IN (ui_in[0]),
         .TX (TX)
     );
 
   // All output pins must be assigned. If not used, assign to 0.
-  assign uo_out[0] = TX;
-  assign uo_out[7:1] = 7'b0;
+  assign uo_out[0] = TX;   //Uart transmit
+  assign uo_out[1] = clk;  //Clock interne
+  assign uo_out[7:2] = 6'b0; 
   assign uio_out = 8'b0;
   assign uio_oe  = 8'b0;
 
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena, ui_in[7:2], uio_in, 1'b0};
+  wire _unused = &{ena, ui_in[7:1], uio_in, 1'b0};
 
 endmodule

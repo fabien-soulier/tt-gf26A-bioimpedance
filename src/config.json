@@ -17,7 +17,7 @@
 
   "//": "CLOCK_PERIOD - Increase this in case you are getting setup time violations.",
   "//": "The value is in nanoseconds, so 20ns == 50MHz.",
-  "CLOCK_PERIOD": 20,
+  "CLOCK_PERIOD": 1000,
 
   "//": "Hold slack margin - Increase them in case you are getting hold violations.",
   "PL_RESIZER_HOLD_SLACK_MARGIN": 0.1,
@@ -29,7 +29,8 @@
 
   "//": "If you need a custom clock configuration, read the following documentation first:",
   "//": "https://tinytapeout.com/faq/#how-can-i-map-an-additional-external-clock-to-one-of-the-gpios",
-  "CLOCK_PORT": "ui_in[1]",
+  
+  "CLOCK_PORT": "clk",
 
   "//": "Configuration docs: https://librelane.readthedocs.io/en/latest/reference/configuration.html",
 
@@ -41,7 +42,9 @@
     "dir::diviseur2.v",
     "dir::tt_um_bioimpedance.v",
     "dir::top_demod.v",
-    "dir::uart_tx_8n1.v"
+    "dir::uart_tx_8n1.v",
+    "dir::compt256.v",
+    "dir:: muv.v"
   ],
   
   "//": "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",

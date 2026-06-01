@@ -22,6 +22,7 @@ module uart_tx_8n1 #(
     parameter STATE_STARTTX = 8'd1;
     parameter STATE_TXING   = 8'd2;
     parameter STATE_TXDONE  = 8'd3;
+    parameter STATE_TXEND   = 8'd4;
 
    /* State variables */
     reg [7:0]  state     = 8'b0;
@@ -40,8 +41,7 @@ module uart_tx_8n1 #(
             clk_count <= 0;
             bits_sent <= 0;
         end else begin
-
-            //start sending? wait senddata
+         //start sending? wait senddata
             if (senddata == 1 && state == STATE_IDLE) begin
                 state  <= STATE_STARTTX;
                 buf_tx <= txbyte;  //On copiel'octet 
@@ -89,10 +89,17 @@ module uart_tx_8n1 #(
                 end else begin
                     clk_count <= 0;
                     txdone    <= 1'b1;  
-                    state     <= STATE_IDLE;
+                    state     <= STATE_TXEND;
                 end
             end
 
+            if (state == STATE_TXEND) begin
+                txdone <= 1'b1;  
+                if (senddata == 0) begin   
+                    txdone <= 1'b0;
+                    state  <= STATE_IDLE;
+                end
+            end
         end
     end
 

@@ -1,25 +1,45 @@
 `timescale 1ns/1ps
-module compt8 (
-    input  wire clki,   
-    input  wire clkq, 
-    input wire inp,  // signal reçu en binaire
-    input wire rst,  
-    output reg  [7:0] count_I = 8'd0, // compteur in-phase
-    output reg  [7:0] count_Q = 8'd0  // compteur Quadrature
+
+module compt8 #(
+    parameter NB = 8,                       
+    parameter NF = 8,
+    parameter J  = 0 //indice de l'étage                    
+)(
+    input  wire clki,
+    input  wire clkq,
+    input  wire inp, // signal recu en binaire
+    input  wire rst,
+    output wire [NB-1:0] count_I, //8 bits voie in-phase
+    output wire [NB-1:0] count_Q //8 bits voie quadrature
 );
+
+    //nb+nf-j-1 
+    localparam ACC_W = NB + NF - J - 1;
+
+    //décalage nf-j-1
+    localparam SHIFT = NF - J - 1;
+
+    reg [ACC_W-1:0] acc_I = 0;
+    reg [ACC_W-1:0] acc_Q = 0;
+
     // voie I
-    always @(posedge clki) begin
+    always @(posedge clki or posedge rst) begin
         if (rst)
-            count_I <= 8'b0;       // amodifier
+            acc_I <= 0;
         else if (inp)
-            count_I <= count_I + 1'b1;   // compte quand entree = 1
-            // sinon bloqué 
+            acc_I <= acc_I + 1'b1;
     end
+
     // voie Q
-    always @(posedge clkq) begin
+    always @(posedge clkq or posedge rst) begin
         if (rst)
-            count_Q <= 8'b0;       
+            acc_Q <= 0;
         else if (inp)
-            count_Q <= count_Q + 1'b1;   // compte quand entree = 1 
+            acc_Q <= acc_Q + 1'b1;
     end
+
+    // Fenetre de NB bits
+    assign count_I = acc_I[SHIFT + NB - 1 : SHIFT];
+    assign count_Q = acc_Q[SHIFT + NB - 1 : SHIFT];
+
 endmodule
