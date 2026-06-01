@@ -1,45 +1,39 @@
-# Makefile
-# See https://docs.cocotb.org/en/stable/quickstart.html for more info
-
-# defaults
+# Defaults
 SIM ?= icarus
 FST ?= -fst # Use more efficient FST format
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
-PROJECT_SOURCES = project.v
 
-ifneq ($(GATES),yes)
+# Modules à tester (décommenter celui voulu)
+#PROJECT_SOURCES = frequency_divider.v
+#PROJECT_SOURCES = compt8.v
+#PROJECT_SOURCES = Output_Register.v
+#PROJECT_SOURCES = diviseur2.v compt8.v top_demod.v
+PROJECT_SOURCES = diviseur2.v compt8.v top_demod.v uart_tx_8n1.v Output_Register.v compt256.v mux.v Top_level.v
 
 # RTL simulation:
-SIM_BUILD				= sim_build/rtl
+SIM_BUILD = sim_build/rtl
 VERILOG_SOURCES += $(addprefix $(SRC_DIR)/,$(PROJECT_SOURCES))
 
-else
-
-# Gate level simulation:
-SIM_BUILD				= sim_build/gl
-COMPILE_ARGS    += -DGL_TEST
-COMPILE_ARGS    += -DFUNCTIONAL
-COMPILE_ARGS    += -DUSE_POWER_PINS
-COMPILE_ARGS    += -DSIM
-COMPILE_ARGS    += -DUNIT_DELAY=\#1
-VERILOG_SOURCES += $(PDK_ROOT)/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/verilog/primitives.v
-VERILOG_SOURCES += $(PDK_ROOT)/gf180mcuD/libs.ref/gf180mcu_fd_sc_mcu7t5v0/verilog/gf180mcu_fd_sc_mcu7t5v0.v
-
-# this gets copied in by the GDS action workflow
-VERILOG_SOURCES += $(PWD)/gate_level_netlist.v
-
-endif
-
 # Allow sharing configuration between design and testbench via `include`:
-COMPILE_ARGS 		+= -I$(SRC_DIR)
+COMPILE_ARGS += -I$(SRC_DIR)
 
 # Include the testbench sources:
-VERILOG_SOURCES += $(PWD)/tb.v
+#VERILOG_SOURCES += $(PWD)/frequency_divider-tb.v
+#VERILOG_SOURCES += $(PWD)/compt8-tb.v
+#VERILOG_SOURCES += $(PWD)/Output_Register-tb.v
+#VERILOG_SOURCES += $(PWD)/top_demod-tb.v
+VERILOG_SOURCES += $(PWD)/Top_level-tb.v
+
 TOPLEVEL = tb
 
+
 # List test modules to run, separated by commas and without the .py suffix:
-COCOTB_TEST_MODULES = test
+#COCOTB_TEST_MODULES = frequency_divider
+#COCOTB_TEST_MODULES = compt8
+#COCOTB_TEST_MODULES = Output_Register
+#COCOTB_TEST_MODULES = top_demod
+COCOTB_TEST_MODULES = Top_level
 
 # include cocotb's make rules to take care of the simulator setup
 include $(shell cocotb-config --makefiles)/Makefile.sim
