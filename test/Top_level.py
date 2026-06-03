@@ -45,6 +45,12 @@ async def lire_q_out_mux(dut):
         q_out |= (o << (8 * i))
     return q_out
 
+async def envoyer_dac_boucle(dut, bits):      
+    while True:
+        for bit in bits:
+            dut.ADC_IN.value = int(bit)
+            await ClockCycles(dut.CLK, 1)
+
 
 @cocotb.test()
 async def test_top_level(dut):
@@ -64,6 +70,7 @@ async def test_top_level(dut):
     dut.RST.value = 0
     dut.ADC_IN.value = 1
     await RisingEdge(dut.ready)
+    await ClockCycles(dut.CLK, 50)
     q_mux = await lire_q_out_mux(dut)
     dut._log.info(f"Q_out MUX = 0x{q_mux:032X}")
     q_uart = await lire_q_out_uart(dut)
@@ -71,13 +78,31 @@ async def test_top_level(dut):
 
     # signal alterne
     dut._log.info("Signal ADC_IN alterne")
+    dut.RST.value = 1 
+    await ClockCycles(dut.CLK, 50)  
+    dut.RST.value = 0
     for i in range(10):
         dut.ADC_IN.value = i % 2
         await ClockCycles(dut.CLK, 1000)
+
     await RisingEdge(dut.ready)
-    q_mux = await lire_q_out_mux(dut)
-    dut._log.info(f"Q_out MUX alterne = 0x{q_mux:032X}")
     q_uart = await lire_q_out_uart(dut)
     dut._log.info(f"Q_out UART alterne = 0x{q_uart:032X}")
+    q_mux = await lire_q_out_mux(dut)
+    dut._log.info(f"Q_out MUX alterne = 0x{q_mux:032X}")
 
-    dut._log.info("Test finished")
+    #test avec le DAC
+    dut._log.info("test avec le DAC")
+    dut.RST.value = 1
+    await ClockCycles(dut.CLK, 10)
+    dut.RST.value = 0
+    # lecture du fichier bitstream
+    with open("bitstream.txt") as f:
+        bits = f.read().split()
+    #on lance
+    cocotb.start_soon(envoyer_dac_boucle(dut, bits))
+    await RisingEdge(dut.ready)
+    q_mux = await lire_q_out_mux(dut)
+    dut._log.info(f"Q_out MUX (DAC) = 0x{q_mux:032X}")
+
+    

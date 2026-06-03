@@ -18,6 +18,7 @@ module tt_um_bioimpedance (
 
 wire TX;
 wire RST = ~rst_n;
+wire [7:0] MUX_OUT;
 
 Top_level #(
         .NF (8),
@@ -27,17 +28,20 @@ Top_level #(
         .CLK (clk),
         .RST (RST),
         .ADC_IN (ui_in[0]),
-        .TX (TX)
+        .TX (TX),
+        .MUX_ADDR(ui_in[1]),
+        .MUX_OUT(MUX_OUT)
+
     );
 
   // All output pins must be assigned. If not used, assign to 0.
   assign uo_out[0] = TX;   //Uart transmit
   assign uo_out[1] = clk;  //Clock interne
   assign uo_out[7:2] = 6'b0; 
-  assign uio_out = 8'b0;
-  assign uio_oe  = 8'b0;
+  assign uio_out = MUX_OUT;
+  assign uio_oe  = 8'hFF;
 
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena, ui_in[7:1], uio_in, 1'b0};
+  wire _unused = &{ena, ui_in[7:2], uio_in, 1'b0};
 
 endmodule
