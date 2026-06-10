@@ -1,10 +1,8 @@
-`timescale 1ns/1ps
-
 module tb();
 
   // Dump the signals to a FST file. You can view it with gtkwave or surfer.
   initial begin
-    $dumpfile("compt8-tb.fst");
+    $dumpfile("top_demod-tb.fst");
     $dumpvars(1, tb);
     #1;
   end

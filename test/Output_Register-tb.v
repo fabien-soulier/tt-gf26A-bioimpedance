@@ -1,5 +1,3 @@
-`timescale 1ns/1ps
-
 module tb();
     parameter NF = 8;
     parameter NB = 8;
