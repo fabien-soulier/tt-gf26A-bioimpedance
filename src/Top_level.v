@@ -1,6 +1,4 @@
 `default_nettype none
-`timescale 1ns/1ps
-
 module Top_level #(
     parameter NF = 8,
     parameter NB = 8,
@@ -9,9 +7,10 @@ module Top_level #(
     input  wire CLK,
     input  wire RST,
     input  wire ADC_IN,
-    input  wire MUX_ADDR, //pour faire avancer le compt d'adresse
+    input  wire [3:0] MUX_ADDR, //pour faire avancer le compt d'adresse
     output wire TX,
-    output wire [7:0] MUX_OUT
+    output wire [7:0] MUX_OUT,
+    output wire dac_out
 );
 
     wire clk_stage0;
@@ -164,21 +163,21 @@ module Top_level #(
 
         end
     end
-
-//compteur d'adresse 4 bits par Mux addr
-    reg [3:0] addr = 4'd0;
-    
-    always @(posedge MUX_ADDR or posedge RST) begin
-        if (RST)
-            addr <= 4'd0;
-        else
-            addr <= addr + 1'b1;
-    end
-
+   
     mux u_mux (
         .data_in  (Q_out_interne),
-        .addr     (addr),
+        .addr     (MUX_ADDR),
         .data_out (MUX_OUT)
     );
+
+    //module dac
+
+
+    dac u_dac (
+        .clk (CLK),
+        .rst (RST),
+        .dac_out(dac_out)
+    );
+
 
 endmodule

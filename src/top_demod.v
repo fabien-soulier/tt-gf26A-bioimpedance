@@ -1,4 +1,3 @@
-`timescale 1ns/1ps
 module top_demod #(
     parameter NB = 8,                       
     parameter NF = 8,

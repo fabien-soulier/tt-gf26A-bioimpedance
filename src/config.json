@@ -44,7 +44,8 @@
     "dir::top_demod.v",
     "dir::uart_tx_8n1.v",
     "dir::mux.v",
-    "dir::compt256.v"
+    "dir::compt256.v",
+    "dir::dac.v"
   ],
   
   "//": "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",

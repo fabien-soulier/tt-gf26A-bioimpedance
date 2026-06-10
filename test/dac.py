@@ -3,7 +3,7 @@ from cocotb.clock import Clock
 from cocotb.triggers import Timer, RisingEdge
 
 @cocotb.test()
-async def test_output_register(dut):
+async def test_dac(dut):
 
     # horloge à 1 MHz
     clock = Clock(dut.clk,1, unit = "us")
