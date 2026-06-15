@@ -1,5 +1,3 @@
-`timescale 1ns/1ps
-
 module compt8 #(
     parameter NB = 8,                       
     parameter NF = 8,

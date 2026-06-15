@@ -27,6 +27,7 @@ async def test_project(dut):
     assert dut.count_Q.value == 0
 
     # Running
+     dut._log.info("Testing reset"
     dut.rst.value = 0
     dut.inp.value = 1
 

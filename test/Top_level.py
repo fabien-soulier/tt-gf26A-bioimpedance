@@ -83,7 +83,7 @@ async def test_top_level(dut):
     dut.RST.value = 0
     for i in range(10):
         dut.ADC_IN.value = i % 2
-        await ClockCycles(dut.CLK, 1000)
+        await ClockCycles(dut.CLK, 1)
 
     await RisingEdge(dut.ready)
     q_uart = await lire_q_out_uart(dut)
