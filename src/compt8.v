@@ -36,13 +36,13 @@ module compt8 #(
         if (rst) begin
         acc_I <= 0;
         enI <= 0;
-    end else if (inp && enI)
+    end else if (inp && (enI !== 0))
 
             acc_I <= acc_I + 1'b1;
     end
 
     always @(posedge master_clk) begin
-        if (enI != 0)
+        if (enI !==0)
          enI <= enI - 1'b1;
     end
     
@@ -53,11 +53,13 @@ module compt8 #(
         acc_Q <= 0;
         enQ <= 0;
     end
-        else if (inp && enQ)
+        else if  (inp && (enQ !== 0))
             acc_Q <= acc_Q + 1'b1;
     end
     always @(posedge master_clk) begin
-        if (enQ != 0)
+
+        if (enQ !==0)
+
          enQ <= enQ - 1'b1;
     end
 
