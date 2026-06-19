@@ -42,7 +42,7 @@ module compt8 #(
     end
 
     always @(posedge master_clk) begin
-        if (enI)
+        if (enI != 0)
          enI <= enI - 1'b1;
     end
     
@@ -57,7 +57,7 @@ module compt8 #(
             acc_Q <= acc_Q + 1'b1;
     end
     always @(posedge master_clk) begin
-        if (enQ)
+        if (enQ != 0)
          enQ <= enQ - 1'b1;
     end
 
