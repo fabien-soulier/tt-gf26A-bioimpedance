@@ -14,6 +14,7 @@ module tb();
   reg rst = 0;
   wire [7:0] count_I;
   wire [7:0] count_Q;
+  reg master_clk = 0;
 
   compt8 dut(
       .clki(clki),
@@ -21,7 +22,8 @@ module tb();
       .inp(inp),  
       .rst(rst),
       .count_I(count_I),
-      .count_Q(count_Q)
+      .count_Q(count_Q),
+      .master_clk(master_clk)
   );
 
 endmodule

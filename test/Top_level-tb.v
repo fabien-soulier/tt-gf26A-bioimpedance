@@ -13,12 +13,15 @@ module tb();
     reg CLK;
     reg RST;
     reg ADC_IN;
-    reg MUX_ADDR = 0; 
+    reg [3:0] MUX_ADDR = 0;
+    reg in;
     
     //wire [TOTAL_BITS-1:0] Q_out;
     wire TX;
     wire [7:0] MUX_OUT;
     wire dac_out;
+    wire dac_out_ram;
+    wire qout;
     
     Top_level #(
         .NF(NF),
@@ -32,10 +35,15 @@ module tb();
         .TX (TX),
         .MUX_ADDR(MUX_ADDR),
         .MUX_OUT(MUX_OUT),
-        .dac_out(dac_out)
+        .dac_out(dac_out),
+        .dac_out_ram(dac_out_ram),
+        .qout(qout),
+        .in(in)
     );
 
     wire ready;
     assign ready = dut.u_outreg.ready;
+    
+
 
 endmodule

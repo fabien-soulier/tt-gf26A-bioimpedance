@@ -2,6 +2,7 @@ import cocotb
 from cocotb.clock import Clock
 from cocotb.triggers import ClockCycles, RisingEdge, FallingEdge
 
+
 CLKS_PER_BIT = 104
 
 async def lire_octet_uart(dut):
@@ -33,13 +34,13 @@ async def lire_q_out_uart(dut):
 async def lire_q_out_mux(dut):
     octets = []
     for i in range(16):
+    
+        dut.MUX_ADDR.value = i
+        await ClockCycles(dut.CLK, 2)
         octet = dut.MUX_OUT.value.to_unsigned()
         octets.append(octet)
         dut._log.info(f"  MUX octet {i} = 0x{octet:02X}")
-        dut.MUX_ADDR.value = 1
-        await ClockCycles(dut.CLK, 2)
-        dut.MUX_ADDR.value = 0
-        await ClockCycles(dut.CLK, 2)
+    
     q_out = 0
     for i, o in enumerate(octets):
         q_out |= (o << (8 * i))
@@ -49,7 +50,7 @@ async def envoyer_dac_boucle(dut, bits):
     while True:
         for bit in bits:
             dut.ADC_IN.value = int(bit)
-            await ClockCycles(dut.CLK, 1)
+            await ClockCycles(dut.CLK, 256)
 
 
 @cocotb.test()
@@ -70,6 +71,8 @@ async def test_top_level(dut):
     dut.RST.value = 0
     dut.ADC_IN.value = 1
     await RisingEdge(dut.ready)
+    await RisingEdge(dut.ready)
+    
     await ClockCycles(dut.CLK, 50)
     q_mux = await lire_q_out_mux(dut)
     dut._log.info(f"Q_out MUX = 0x{q_mux:032X}")
@@ -83,7 +86,7 @@ async def test_top_level(dut):
     dut.RST.value = 0
     for i in range(10):
         dut.ADC_IN.value = i % 2
-        await ClockCycles(dut.CLK, 1)
+        await ClockCycles(dut.CLK, 4*256)
 
     await RisingEdge(dut.ready)
     q_uart = await lire_q_out_uart(dut)

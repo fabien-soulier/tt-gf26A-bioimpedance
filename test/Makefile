@@ -11,7 +11,7 @@ SRC_DIR = $(PWD)/../src
 #PROJECT_SOURCES = diviseur2.v compt8.v top_demod.v
 #PROJECT_SOURCES = dac.v
 #PROJECT_SOURCES  = dac_ram.v
-PROJECT_SOURCES = diviseur2.v compt8.v top_demod.v uart_tx_8n1.v Output_Register.v compt256.v mux.v dac.v Top_level.v
+PROJECT_SOURCES = diviseur2.v compt8.v top_demod.v uart_tx_8n1.v Output_Register.v mux.v dac.v dac_ram.v div256.v bascule.v Top_level.v
 
 
  

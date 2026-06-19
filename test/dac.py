@@ -16,11 +16,15 @@ async def test_dac(dut):
     await RisingEdge(dut.clk)
     dut.rst.value = 0
     
-    # Lecture de 50 bit
+    # Lecture des 512 bit
     dut._log.info("lecture du bitstream:")
-    for i in range(50):
+    for i in range(20):
         await RisingEdge(dut.clk)
         dut._log.info(f"cycle {i}:dac_out = {int(dut.dac_out.value)}")
+
+    #faire un test pour voir si ça reboucle bien
+    dut._log.info("lecture pour voir si ça reboucle bien")
+
 
 
 

@@ -1,4 +1,3 @@
-`timescale 1ns/1ps
 
 `define NF 8
 `define NB 16
