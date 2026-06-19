@@ -1,5 +1,3 @@
-`default_nettype none
-`timescale 1ns/1ps
 module Output_Register #(
     parameter NF = 8, 
     parameter NB = 8, 
@@ -25,4 +23,9 @@ module Output_Register #(
             end
         end
     end
+
+    always @ (posedge sending) begin
+        ready <= 1'b0;
+    end
+
 endmodule

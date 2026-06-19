@@ -8,7 +8,8 @@ module compt8 #(
     input  wire inp, // signal recu en binaire
     input  wire rst,
     output wire [NB-1:0] count_I, //8 bits voie in-phase
-    output wire [NB-1:0] count_Q //8 bits voie quadrature
+    output wire [NB-1:0] count_Q,//8 bits voie quadrature
+    input wire master_clk
 );
 
     //nb+nf-j-1 
@@ -19,21 +20,45 @@ module compt8 #(
 
     reg [ACC_W-1:0] acc_I = 0;
     reg [ACC_W-1:0] acc_Q = 0;
+    reg [NB -1 :0] enI =  0 ;
+    reg [NB -1 :0] enQ =  0 ;
+
+    always @ (posedge clki) begin
+        enI <= {NB{1'b1}}; 
+    end
+
+    always @ (posedge clkq) begin
+         enQ <= {NB{1'b1}};
+    end
 
     // voie I
-    always @(posedge clki or posedge rst) begin
-        if (rst)
-            acc_I <= 0;
-        else if (inp)
+    always @(posedge master_clk or posedge rst ) begin
+        if (rst) begin
+        acc_I <= 0;
+        enI <= 0;
+    end else if (inp && enI)
+
             acc_I <= acc_I + 1'b1;
     end
 
+    always @(posedge master_clk) begin
+        if (enI)
+         enI <= enI - 1'b1;
+    end
+    
+
     // voie Q
-    always @(posedge clkq or posedge rst) begin
-        if (rst)
-            acc_Q <= 0;
-        else if (inp)
+    always @(posedge master_clk or posedge rst) begin
+        if (rst) begin
+        acc_Q <= 0;
+        enQ <= 0;
+    end
+        else if (inp && enQ)
             acc_Q <= acc_Q + 1'b1;
+    end
+    always @(posedge master_clk) begin
+        if (enQ)
+         enQ <= enQ - 1'b1;
     end
 
     // Fenetre de NB bits

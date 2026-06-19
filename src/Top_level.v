@@ -1,4 +1,3 @@
-`default_nettype none
 module Top_level #(
     parameter NF = 8,
     parameter NB = 8,
@@ -7,17 +6,31 @@ module Top_level #(
     input  wire CLK,
     input  wire RST,
     input  wire ADC_IN,
-    input  wire [3:0] MUX_ADDR, //pour faire avancer le compt d'adresse
+    input  wire [3:0] MUX_ADDR, 
     output wire TX,
     output wire [7:0] MUX_OUT,
-    output wire dac_out
+    output wire dac_out,
+    output wire dac_out_ram,
+    output wire qout,
+    input wire in // la connecter sur une pin dans le config.json
+
 );
+
+//fck/256
+wire clk_256;
+
+div256 u_div256 (
+    .clk    (CLK),
+    .rst    (RST),
+    .clk_256(clk_256)
+);
+
 
     wire clk_stage0;
     wire clk_stage0_q_unused;
     
     diviseur2 u_div_start (
-        .clk(CLK),
+        .clk(clk_256),
         .rst(RST),
         .clki(clk_stage0),
         .clkq(clk_stage0_q_unused)
@@ -39,10 +52,11 @@ module Top_level #(
                 u_demod (
                     .in(ADC_IN),
                     .rst(RST),
-                    .clk(clk_stage0),
+                    .clk(clk_stage0), 
                     .i_msb(S[k]),
                     .q_msb(Q[k]),
-                    .clk_div2(clk_chain[k])
+                    .clk_div2(clk_chain[k]),
+                    .master_clk(CLK)
                 );
             end else begin
                 top_demod #(
@@ -56,19 +70,22 @@ module Top_level #(
                     .clk(clk_chain[k-1]),
                     .i_msb(S[k]),
                     .q_msb(Q[k]),
-                    .clk_div2(clk_chain[k])
+                    .clk_div2(clk_chain[k]),
+                    .master_clk(CLK)
                 );
             end
         end
     endgenerate
 
-    // faire un module et l'instancier
+    //declenché par la division par 2 du dernier étage
     wire set;
-
-    compt256 u_cnt256 (
+    wire set_q_unused;
+   
+    diviseur2 u_div_set (
         .clk (clk_chain[NF-1]),
         .rst (RST),
-        .set (set)
+        .clki(set),
+        .clkq(set_q_unused)
     );
 
     wire [TOTAL_BITS-1:0] Q_bus;
@@ -110,12 +127,12 @@ module Top_level #(
         .CLK_FREQ (1000000),
         .BAUD_RATE (9600)
     ) uart (
-        .clk     (CLK),
-        .rst     (RST),
-        .txbyte  (txbyte),
+        .clk (CLK),
+        .rst (RST),
+        .txbyte (txbyte),
         .senddata(senddata),
-        .txdone  (txdone),
-        .tx      (TX)
+        .txdone (txdone),
+        .tx (TX)
     );
 
     always @(posedge CLK or posedge RST) begin
@@ -170,14 +187,31 @@ module Top_level #(
         .data_out (MUX_OUT)
     );
 
-    //module dac
-
-
+    //module dac à fclk_master/256 
     dac u_dac (
-        .clk (CLK),
+        .clk (clk_256),
         .rst (RST),
         .dac_out(dac_out)
     );
+    
+    
+    //module dac_ram
+    wire we;
+    wire dac_data_in;
+    dac_ram u_dac_ram(
+        .clk (clk_256), 
+        .rst(RST),
+        .we(we),
+        .dac_data_in(dac_data_in),
+        .dac_out_ram(dac_out_ram)
+    );
 
+    //module bascule d
+    bascule u_bascule(
+        .clk(CLK),
+        .rst(RST),
+        .in(in),
+        .qout(qout)
+    );
 
 endmodule

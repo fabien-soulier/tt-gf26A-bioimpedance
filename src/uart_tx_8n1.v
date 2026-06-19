@@ -1,4 +1,3 @@
-`default_nettype none
 module uart_tx_8n1 #(
     parameter CLK_FREQ  = 1000000,  // frequence d'horloge
     parameter BAUD_RATE = 9600      

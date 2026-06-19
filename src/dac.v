@@ -25,4 +25,5 @@ module dac (
                 rd_addr <= rd_addr + 9'd1;
         end
     end
+    
 endmodule

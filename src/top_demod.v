@@ -6,6 +6,7 @@ module top_demod #(
     input  wire in,
     input  wire rst,
     input  wire clk,
+    input  wire master_clk,
     output wire [7:0] i_msb,
     output wire [7:0] q_msb,
     output wire clk_div2
@@ -27,14 +28,14 @@ compt8 #(
     .NB (NB),
     .NF (NF),
     .J (J)
-
-)u_cnt (
-    .clki(clki),
+) u_cnt (
+    .clki (clki),
     .clkq (clkq),
     .inp (in),
     .rst (rst),
     .count_I (count_I),
-    .count_Q (count_Q)
+    .count_Q (count_Q),
+    .master_clk(master_clk)
 );
 
 assign i_msb = count_I;

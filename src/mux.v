@@ -1,5 +1,3 @@
-`timescale 1ns/1ps
-
 module mux (
     input wire [127:0] data_in,//128 bits 16 octets
     input wire [3:0] addr, //entrée de selection
