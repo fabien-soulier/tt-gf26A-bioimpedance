@@ -24,7 +24,7 @@ module Output_Register #(
         end
     end
 
-    always @ (posedge sending) begin
+    always @ (negedge sending) begin
         ready <= 1'b0;
     end
 
