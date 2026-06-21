@@ -22,8 +22,11 @@ module compt8 #(
     reg [ACC_W-1:0] acc_Q = 0;
     reg [NB -1 :0] enI =  0 ;
     reg [NB -1 :0] enQ =  0 ;
+    reg clki_fmontant = 0;
+    reg clkq_fmontant= 0;
 
-    always @ (posedge clki) begin
+
+/* always @ (posedge clki) begin
         enI <= {NB{1'b1}}; 
     end
 
@@ -36,13 +39,13 @@ module compt8 #(
         if (rst) begin
         acc_I <= 0;
         enI <= 0;
-    end else if (inp && (enI !== 0))
+    end else if (inp && enI)
 
             acc_I <= acc_I + 1'b1;
     end
 
     always @(posedge master_clk) begin
-        if (enI !==0)
+        if (enI != 0)
          enI <= enI - 1'b1;
     end
     
@@ -53,14 +56,46 @@ module compt8 #(
         acc_Q <= 0;
         enQ <= 0;
     end
-        else if  (inp && (enQ !== 0))
+        else if (inp && enQ)
             acc_Q <= acc_Q + 1'b1;
     end
     always @(posedge master_clk) begin
-
-        if (enQ !==0)
-
+        if (enQ != 0)
          enQ <= enQ - 1'b1;
+    end*/
+
+    // voie I
+    always @(posedge master_clk or posedge rst) begin
+        if (rst) begin
+            acc_I <= 0;
+            enI <= 0;
+            clki_fmontant <= 0;
+        end else begin
+                clki_fmontant <= clki;
+            if (clki && !clki_fmontant) begin  //front montant de cli
+                enI <= {NB{1'b1}};
+            end else if (inp && (enI !== 0))begin
+                    acc_I <= acc_I + 1'b1;
+                    enI <= enI - 1'b1;
+            end
+        end
+    end
+
+    // voie Q
+    always @(posedge master_clk or posedge rst) begin
+        if (rst) begin
+            acc_Q <= 0;
+            enQ <= 0;
+            clkq_fmontant <= 0;
+        end else begin
+                clkq_fmontant <= clkq;//recopie
+            if (clkq && !clkq_fmontant) begin  //front montant de clkq
+                enQ <= {NB{1'b1}};
+            end else if (inp && (enQ !== 0)) begin
+                    acc_Q <= acc_Q + 1'b1;
+                    enQ <= enQ - 1'b1;
+            end
+        end
     end
 
     // Fenetre de NB bits
