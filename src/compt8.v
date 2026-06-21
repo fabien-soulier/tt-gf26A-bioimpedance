@@ -25,22 +25,36 @@ module compt8 #(
 
     // voie I
 
-    always @ (posedge clki) begin
-        enI <= {NB{1'b1}}; 
-    end
-
     always @(posedge master_clk or posedge rst) begin
         if (rst) begin
             acc_I <= 0;
             enI <= 0;
-        end 
+            end 
+        else if (clki = 0) 
+            enI <= {NB{1'b1}};
         else if (enI != 0) begin
-enQ <= enQ - 1'b1;
-           if (inp)  
-              acc_Q <= acc_Q + 1'b1;
+             enI <= enI - 1'b1;
+	     if (inp)
+	        acc_I <= acc_I + 1'b1;
         end
     end
+ 
+   // voie Q
 
+    always @(posedge master_clk or posedge rst) begin
+        if (rst) begin
+            acc_Q <= 0;
+            enQ <= 0;
+            end 
+        else if (clkq = 0) 
+            enQ <= {NB{1'b1}};
+        else if (enQ != 0) begin
+             enQ <= enQ - 1'b1;
+	     if (inp)
+	        acc_Q <= acc_Q + 1'b1;
+        end
+    end
+ 
     // Fenetre de NB bits
     assign count_I = acc_I[SHIFT + NB - 1 : SHIFT];
     assign count_Q = acc_Q[SHIFT + NB - 1 : SHIFT];
