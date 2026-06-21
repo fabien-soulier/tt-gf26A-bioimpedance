@@ -25,6 +25,5 @@ always @(posedge set or posedge rst) begin
         end 
         else ready <= 1'b0;
         end
-end
-
+    end
 endmodule
