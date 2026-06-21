@@ -23,42 +23,22 @@ module compt8 #(
     reg [NB -1 :0] enI =  0 ;
     reg [NB -1 :0] enQ =  0 ;
 
+    // voie I
+
     always @ (posedge clki) begin
         enI <= {NB{1'b1}}; 
     end
 
-    always @ (posedge clkq) begin
-         enQ <= {NB{1'b1}};
-    end
-
-    // voie I
-    always @(posedge master_clk or posedge rst ) begin
-        if (rst) begin
-        acc_I <= 0;
-        enI <= 0;
-    end else if (inp && enI)
-
-            acc_I <= acc_I + 1'b1;
-    end
-
-    always @(posedge master_clk) begin
-        if (enI != 0)
-         enI <= enI - 1'b1;
-    end
-    
-
-    // voie Q
     always @(posedge master_clk or posedge rst) begin
         if (rst) begin
-        acc_Q <= 0;
-        enQ <= 0;
-    end
-        else if (inp && enQ)
-            acc_Q <= acc_Q + 1'b1;
-    end
-    always @(posedge master_clk) begin
-        if (enQ != 0)
-         enQ <= enQ - 1'b1;
+            acc_I <= 0;
+            enI <= 0;
+        end 
+        else if (enI != 0) begin
+enQ <= enQ - 1'b1;
+           if (inp)  
+              acc_Q <= acc_Q + 1'b1;
+        end
     end
 
     // Fenetre de NB bits
