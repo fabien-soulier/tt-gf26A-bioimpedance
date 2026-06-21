@@ -15,17 +15,16 @@ module Output_Register #(
         if (rst) begin
             Q_out <= {TOTAL_BITS{1'b0}};
             ready <= 1'b0;
-        end else begin
-            //ready <= 1'b0;
-            if (set && !sending) begin
-                Q_out <= Q;
-                ready <= 1'b1;
-            end
-        end
+        end else if (sending) begin
+            ready <= 1'b0;
+        end else if (set && !sending) begin
+            Q_out <= Q;
+            ready <= 1'b1;
     end
+end
 
-    always @ (posedge sending) begin
+    /* always @ (posedge sending) begin
         ready <= 1'b0;
-    end
+    end */
 
 endmodule
