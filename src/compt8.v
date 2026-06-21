@@ -30,7 +30,7 @@ module compt8 #(
             acc_I <= 0;
             enI <= 0;
             end 
-        else if (clki = 0) 
+        else if (clki == 0) 
             enI <= {NB{1'b1}};
         else if (enI != 0) begin
              enI <= enI - 1'b1;
@@ -46,7 +46,7 @@ module compt8 #(
             acc_Q <= 0;
             enQ <= 0;
             end 
-        else if (clkq = 0) 
+        else if (clkq == 0) 
             enQ <= {NB{1'b1}};
         else if (enQ != 0) begin
              enQ <= enQ - 1'b1;
