@@ -12,8 +12,9 @@ module Top_level #(
     output wire dac_out,
     output wire dac_out_ram,
     output wire qout,
-    input wire in // la connecter sur une pin dans le config.json
-
+    input wire in, // la connecter sur une pin dans le config.json
+    input wire we,
+    input wire dac_data_in
 );
 
 //fck/256
@@ -196,8 +197,6 @@ div256 u_div256 (
     
     
     //module dac_ram
-    wire we;
-    wire dac_data_in;
     dac_ram u_dac_ram(
         .clk (clk_256), 
         .rst(RST),
