@@ -1,0 +1,29 @@
+
+`define NF 8
+`define NB 16
+`define TOTAL_BITS (`NF * `NB * 2)
+
+module tb;
+    reg clk;
+    reg set;
+    reg [`TOTAL_BITS-1:0] Q;
+    wire [`TOTAL_BITS-1:0] Q_out;
+
+    Output_Register dut (
+        .clk(clk),
+        .set(set),
+        .Q(Q),
+        .Q_out(Q_out)
+    );
+
+endmodule
+
+
+
+
+
+
+
+
+
+
