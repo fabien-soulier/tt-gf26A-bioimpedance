@@ -10,8 +10,7 @@ SRC_DIR = $(PWD)/../src
 #PROJECT_SOURCES = Output_Register.v
 #PROJECT_SOURCES = diviseur2.v compt8.v top_demod.v
 #PROJECT_SOURCES = dac.v
-#PROJECT_SOURCES  = dac_ram.v
-PROJECT_SOURCES = diviseur2.v compt8.v top_demod.v uart_tx_8n1.v Output_Register.v mux.v dac.v dac_ram.v div256.v bascule.v Top_level.v
+PROJECT_SOURCES = diviseur2.v compt8.v top_demod.v uart_tx_8n1.v Output_Register.v mux.v dac.v  div256.v bascule.v Top_level.v
 
 
  
@@ -28,7 +27,6 @@ COMPILE_ARGS += -I$(SRC_DIR)
 #VERILOG_SOURCES += $(PWD)/Output_Register-tb.v
 #VERILOG_SOURCES += $(PWD)/top_demod-tb.v
 #VERILOG_SOURCES += $(PWD)/dac-tb.v
-#VERILOG_SOURCES += $(PWD)/dac_ram-tb.v
 VERILOG_SOURCES += $(PWD)/Top_level-tb.v
 
 TOPLEVEL = tb
@@ -40,7 +38,6 @@ TOPLEVEL = tb
 #COCOTB_TEST_MODULES = Output_Register
 #COCOTB_TEST_MODULES = top_demod
 #COCOTB_TEST_MODULES = dac
-#COCOTB_TEST_MODULES = dac_ram
 COCOTB_TEST_MODULES = Top_level
 
 # include cocotb's make rules to take care of the simulator setup

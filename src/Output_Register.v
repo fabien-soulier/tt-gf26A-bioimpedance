@@ -6,7 +6,8 @@ module Output_Register #(
    
     input  wire rst,
     input  wire set,
-    input  wire sending,                     
+    input  wire sending,
+    input  wire clk,                     
     output reg  ready,
     input  wire [TOTAL_BITS-1:0] Q,
     output reg  [TOTAL_BITS-1:0] Q_out

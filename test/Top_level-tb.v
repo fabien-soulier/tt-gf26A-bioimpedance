@@ -20,7 +20,6 @@ module tb();
     wire TX;
     wire [7:0] MUX_OUT;
     wire dac_out;
-    wire dac_out_ram;
     wire qout;
     
     Top_level #(
@@ -36,7 +35,6 @@ module tb();
         .MUX_ADDR(MUX_ADDR),
         .MUX_OUT(MUX_OUT),
         .dac_out(dac_out),
-        .dac_out_ram(dac_out_ram),
         .qout(qout),
         .in(in)
     );

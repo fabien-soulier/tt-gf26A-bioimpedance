@@ -7,7 +7,7 @@ module dac (
     reg memory [0:511];
 
     // Compteur d'adresse
-    reg [8:0] rd_addr;
+    reg [8:0] rd_addr = 9'd0;
 
     initial begin
         $readmemb("../src/bitstream.txt", memory, 0, 511);
