@@ -12,7 +12,7 @@ module Output_Register #(
     output reg  [TOTAL_BITS-1:0] Q_out
 );
 
-always @(posedge set or posedge rst) begin //un registre qui est 
+always @(posedge set or posedge rst) begin
     if (rst) begin
         Q_out <= {TOTAL_BITS{1'b0}};
         ready <= 1'b0;
@@ -22,7 +22,8 @@ always @(posedge set or posedge rst) begin //un registre qui est
         if (set && !sending) begin
             Q_out <= Q;
             ready <= 1'b1;
-        end else ready <= 1'b0;
+        end 
+        else ready <= 1'b0;
         end
     end
 endmodule
