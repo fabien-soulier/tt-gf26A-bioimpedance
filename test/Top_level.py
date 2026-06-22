@@ -105,6 +105,7 @@ async def test_top_level(dut):
     #on lance
     cocotb.start_soon(envoyer_dac_boucle(dut, bits))
     await RisingEdge(dut.ready)
+    await RisingEdge(dut.ready)
     q_mux = await lire_q_out_mux(dut)
     dut._log.info(f"Q_out MUX (DAC) = 0x{q_mux:032X}")
 
