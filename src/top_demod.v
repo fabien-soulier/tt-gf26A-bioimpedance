@@ -7,6 +7,7 @@ module top_demod #(
     input  wire rst,
     input  wire clk,
     input  wire master_clk,
+    input  wire RZ,
     output wire [7:0] i_msb,
     output wire [7:0] q_msb,
     output wire clk_div2
@@ -14,6 +15,8 @@ module top_demod #(
 
 wire clki, clkq;
 wire [7:0] count_I, count_Q;
+wire rst_cnt ;
+assign rst_cnt = rst || RZ ;
 
 diviseur2 u_div (
     .clk (clk),
@@ -32,7 +35,7 @@ compt8 #(
     .clki (clki),
     .clkq (clkq),
     .inp (in),
-    .rst (rst),
+    .rst (rst_cnt),
     .count_I (count_I),
     .count_Q (count_Q),
     .master_clk(master_clk)

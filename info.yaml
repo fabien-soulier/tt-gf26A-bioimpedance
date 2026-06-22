@@ -28,7 +28,7 @@ project:
     - "dac.v"
     - "bascule.v"
     - "div256.v"
-    - "dac_ram.v"
+  
 
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
 # This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
@@ -40,8 +40,8 @@ pinout:
   ui[3]: "MUX_ADDR[2]"
   ui[4]: "MUX_ADDR[3]"
   ui[5]: "BASCULE_IN"
-  ui[6]: "DAC_WE"
-  ui[7]: "DAC_DATA_IN"
+  ui[6]: ""
+  ui[7]: ""
 
   # Outputs
   uo[0]: "MUX_OUT[0]"
@@ -57,8 +57,8 @@ pinout:
   uio[0]: "TX"
   uio[1]: "CLK_SORTIE"
   uio[2]: "DAC_OUT"
-  uio[3]: "DAc_OUT_RAM"
-  uio[4]: "QOUT"
+  uio[3]: "QOUT"
+  uio[4]: ""
   uio[5]: ""
   uio[6]: ""
   uio[7]: ""

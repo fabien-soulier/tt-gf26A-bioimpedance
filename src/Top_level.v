@@ -10,13 +10,24 @@ module Top_level #(
     output wire TX,
     output wire [7:0] MUX_OUT,
     output wire dac_out,
-    output wire dac_out_ram,
-    input wire we,
-    input wire dac_data_in,
     output wire qout,
-    input wire in // la connecter sur une pin dans le config.json
-
+    input  wire in
 );
+
+wire set;
+wire ready;
+reg rst_demod = 0;
+wire txdone;
+always @ (posedge txdone or negedge set ) begin
+    if (set)
+        rst_demod <= 1'b1;
+    else 
+        rst_demod <= 1'b0;
+end 
+
+
+// wire rst_demod;
+// assign rst_demod = RST;
 
 //fck/256
 wire clk_256;
@@ -53,10 +64,11 @@ div256 u_div256 (
                 )
                 u_demod (
                     .in(ADC_IN),
-                    .rst(RST),
+                    .rst(RST), //not set
                     .clk(clk_stage0), 
                     .i_msb(S[k]),
                     .q_msb(Q[k]),
+                    .RZ (rst_demod),
                     .clk_div2(clk_chain[k]),
                     .master_clk(CLK)
                 );
@@ -72,6 +84,7 @@ div256 u_div256 (
                     .clk(clk_chain[k-1]),
                     .i_msb(S[k]),
                     .q_msb(Q[k]),
+                    .RZ(rst_demod),
                     .clk_div2(clk_chain[k]),
                     .master_clk(CLK)
                 );
@@ -80,7 +93,7 @@ div256 u_div256 (
     endgenerate
 
     //declenché par la division par 2 du dernier étage
-    wire set;
+    
     wire set_q_unused;
    
     diviseur2 u_div_set (
@@ -103,7 +116,7 @@ div256 u_div256 (
         Q[0], S[0]
     };
 
-    wire ready;
+   
     wire [TOTAL_BITS-1:0] Q_out_interne;
     reg sending = 0;
 
@@ -114,6 +127,7 @@ div256 u_div256 (
     ) u_outreg (
         .rst(RST),
         .set(set),
+        .clk(CLK),
         .sending(sending),
         .Q(Q_bus),
         .ready(ready),
@@ -123,7 +137,7 @@ div256 u_div256 (
     reg [3:0] byte_idx = 0;
     reg senddata = 0;
     reg [7:0] txbyte = 0;
-    wire txdone;
+   
 
     uart_tx_8n1 #(
         .CLK_FREQ (1000000),
@@ -196,15 +210,6 @@ div256 u_div256 (
         .dac_out(dac_out)
     );
     
-    
-    //module dac_ram
-    dac_ram u_dac_ram(
-        .clk (clk_256), 
-        .rst(RST),
-        .we(we),
-        .dac_data_in(dac_data_in),
-        .dac_out_ram(dac_out_ram)
-    );
 
     //module bascule d
     bascule u_bascule(
