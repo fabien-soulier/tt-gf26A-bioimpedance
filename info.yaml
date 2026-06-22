@@ -40,8 +40,8 @@ pinout:
   ui[3]: "MUX_ADDR[2]"
   ui[4]: "MUX_ADDR[3]"
   ui[5]: "BASCULE_IN"
-  ui[6]: "DAC_WE"
-  ui[7]: "DAC_DATA_IN"
+  ui[6]: ""
+  ui[7]: ""
 
   # Outputs
   uo[0]: "MUX_OUT[0]"
