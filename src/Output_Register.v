@@ -20,7 +20,7 @@ always @(posedge set or posedge rst) begin
     end 
     else begin
         //ready <= 1'b0;
-        if (set && !sending) begin
+        if (!sending) begin
             Q_out <= Q;
             ready <= 1'b1;
         end 

@@ -18,7 +18,7 @@ wire set;
 wire ready;
 reg rst_demod = 0;
 wire txdone;
-always @ (posedge txdone or negedge set ) begin
+always @ (posedge ready or negedge set ) begin
     if (set)
         rst_demod <= 1'b1;
     else 
@@ -37,7 +37,6 @@ div256 u_div256 (
     .rst    (RST),
     .clk_256(clk_256)
 );
-
 
     wire clk_stage0;
     wire clk_stage0_q_unused;
