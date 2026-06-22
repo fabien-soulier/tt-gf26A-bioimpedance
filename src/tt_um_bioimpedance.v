@@ -38,7 +38,9 @@ Top_level #(
         .MUX_OUT(MUX_OUT),  
         .dac_out(dac_out),
         .dac_out_ram(dac_out_ram),
-        .qout(qout)
+        .qout(qout),
+        .we(ui_in[6]),
+        .dac_data_in(ui_in[7])
     );
 
   //All output pins must be assigned. If not used, assign to 0.
@@ -49,10 +51,10 @@ Top_level #(
   assign uio_out[4] = qout;   //sortie de la bascuele 
   assign uio_out[7:5] = 3'b0;
   assign uo_out = MUX_OUT;  
-  assign uio_oe = 8'b0001_1111; //5 sorties
+  assign uio_oe = 8'b0001_1111; //5 sorties sur les bidirectionnelles
 
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena,ui_in[7:6],uio_in,1'b0};
- 
+  wire _unused = &{ena,uio_in,1'b0};
+
 
 endmodule

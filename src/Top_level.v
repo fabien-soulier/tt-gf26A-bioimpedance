@@ -11,6 +11,8 @@ module Top_level #(
     output wire [7:0] MUX_OUT,
     output wire dac_out,
     output wire dac_out_ram,
+    input wire we,
+    input wire dac_data_in,
     output wire qout,
     input wire in // la connecter sur une pin dans le config.json
 
@@ -196,8 +198,6 @@ div256 u_div256 (
     
     
     //module dac_ram
-    wire we;
-    wire dac_data_in;
     dac_ram u_dac_ram(
         .clk (clk_256), 
         .rst(RST),
